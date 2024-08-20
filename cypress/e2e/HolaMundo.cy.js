@@ -2,7 +2,7 @@
 describe('Prueba de Hola Mundo', () => {
   it('Muestra el mensaje "Hola Mundo" y hace clic en el botón', () => {
     // Visita la aplicación
-    cy.visit('http://localhost:5173')
+    cy.visit('http://localhost:4173')
 
     // Verifica que el mensaje "Hola Mundo" esté presente
     cy.contains('h1', 'Hola Mundo')
