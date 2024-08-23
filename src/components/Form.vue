@@ -1,62 +1,56 @@
 <template>
   <div>
     <div data-title>
-      <h1 :style="{ color, transform: aGirar ? 'rotate(180deg)' : 'none' }">{{ message }}</h1>
-      <button @click="delRevés">Magia</button>
+      <h1>{{ message }}</h1>
     </div>
 
     <div data-form-group>
-      <label for="Edad">Edad:</label><br>
-      <select id="Edad" v-model="Edad" @change="emitFormData">
-        <option value="Menor de edad">Menor de edad</option>
-        <option value="Mayor de edad">Mayor de edad</option>
-        <option value="Infante">Infante</option>
-      </select>
+      <label for="name">Name:</label><br>
+      <input type="text" id="name" v-model="localFormData.name" />
     </div>
 
     <div data-form-group>
-      <label for="Lugar de nacimiento">Lugar de nacimiento:</label><br>
-      <select id="Lugar de nacimiento" v-model="LugarDeNacimiento" @change="emitFormData">
-        <option value="España">España</option>
-        <option value="Alemania">Alemania</option>
-        <option value="Francia">Francia</option>
-        <option value="Eslovenia">Eslovenia</option>
-      </select>
+      <label for="description">Description:</label><br>
+      <textarea id="description" v-model="localFormData.description"></textarea>
     </div>
 
     <div data-form-group>
-      <label for="Situación">Situación:</label><br>
-      <select id="Situación" v-model="Situación" @change="emitFormData">
-        <option value="Empleado">Empleado</option>
-        <option value="Desempleado">Desempleado</option>
-        <option value="De Baja">De Baja</option>
-      </select>
+      <label for="price">Price:</label><br>
+      <input type="number" id="price" v-model="localFormData.price" />
+    </div>
+
+    <div data-form-group>
+      <button @click="saveFormData">Save</button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    formData: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
-      message: 'Formulario',
-      aGirar: false,
-      Edad: '',
-      LugarDeNacimiento: '',
-      Situación: ''
+      message: 'Edit Item',
+      localFormData: { ...this.formData }
     };
   },
   methods: {
-    delRevés() {
-      this.aGirar = !this.aGirar;
-    },
-    emitFormData() {
-      const formData = {
-        Edad: this.Edad,
-        LugarDeNacimiento: this.LugarDeNacimiento,
-        Situación: this.Situación
-      };
-      this.$emit('formDataChanged', formData);
+    saveFormData() {
+      this.$emit('saveFormData', this.localFormData);
+    }
+  },
+  watch: {
+    formData: {
+      handler(newVal) {
+        this.localFormData = { ...newVal };
+      },
+      deep: true,
+      immediate: true
     }
   }
 }
@@ -72,18 +66,17 @@ h1 {
   padding-bottom: 10px;
   border: transparent;
   margin-bottom: 20px;
-  margin: 30px ;
+  margin: 30px;
 }
 
 [data-form-group] {
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  margin: 30px ;
+  margin: 30px;
   width: 300px;
   margin-bottom: 15px;
 }
-
 
 div {
   border: 1px solid #ccc;
@@ -97,22 +90,33 @@ label {
   color: white;
 }
 
-select {
+input, textarea {
   width: 100%;
   padding: 8px;
   margin-top: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  background-color: #333;
+  color: white;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 button {
-  display: block;
-  margin: 20px 0;
   padding: 10px 20px;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 4px;
+  cursor: pointer;
 }
 
 button:hover {

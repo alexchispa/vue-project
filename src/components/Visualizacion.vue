@@ -1,21 +1,21 @@
 <template>
-    <div>
-      <h2>Datos del Formulario</h2>
-      <p>Edad: {{ formData.Edad }}</p>
-      <p>Lugar de nacimiento: {{ formData.LugarDeNacimiento }}</p>
-      <p>Situación: {{ formData.Situación }}</p>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    props: {
-      formData: {
-        type: Object,
-        required: true
-      }
+  <div>
+    <h2>Datos del Formulario</h2>
+    <p>Edad: {{ formData.Edad }}</p>
+    <p>Lugar de nacimiento: {{ formData.LugarDeNacimiento }}</p>
+    <p>Situación: {{ formData.Situación }}</p>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    formData: {
+      type: Object,
+      required: true
     }
   }
+}
 </script>
 
 <style scoped>
@@ -38,4 +38,3 @@ p {
   color: white;
 }
 </style>
-
