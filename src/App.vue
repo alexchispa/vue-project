@@ -5,12 +5,14 @@
 </template>
 
 <script>
-import Padre from './components/Padre.vue';
+import FormularioLibro from './components/FormularioLibro.vue';
+import ListaLibros from './components/ListaLibros.vue';
 
 export default {
   name: 'App',
   components: {
-    Padre
+    FormularioLibro,
+    ListaLibros
   }
 }
 </script>

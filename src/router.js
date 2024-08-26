@@ -1,33 +1,16 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Padre from '@/components/Padre.vue'
-import Form from '@/components/Form.vue'
-import Visualizacion from '@/components/Visualizacion.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import ListaLibros from './components/ListaLibros.vue';
+import FormularioLibro from './components/FormularioLibro.vue';
 
 const routes = [
-  {
-    path: '/',
-    name: 'Padre',
-    component: Padre,
-    children: [
-      {
-        path: 'details',
-        name: 'Details',
-        components: {
-          default: Form,
-          visualizacion: Visualizacion
-        },
-        props: {
-          default: route => ({ id: route.hash.slice(1) }),
-          visualizacion: route => ({ id: route.hash.slice(1) })
-        }
-      }
-    ]
-  }
-]
+    { path: '/', component: ListaLibros },
+    { path: '/books/new', component: FormularioLibro },
+    { path: '/books/:title', component: FormularioLibro, props: true }
+];
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes
-})
+    history: createWebHistory(),
+    routes
+});
 
-export default router
+export default router;
