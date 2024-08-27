@@ -1,74 +1,66 @@
 <template>
-    <div>
-      <h1>{{ isEdit ? 'Edit Book' : 'Add Book' }}</h1>
-      <form @submit.prevent="saveBook">
-        <div>
-          <label>Title:</label>
-          <input v-model="book.title" required />
-        </div>
-        <div>
-          <label>Author:</label>
-          <input v-model="book.author" required />
-        </div>
-        <div>
-          <label>Year:</label>
-          <input v-model="book.year" type="number" required />
-        </div>
-        <button type="submit">Save</button>
-      </form>
-    </div>
-  </template>
-  
-  <script>
-  import axios from 'axios';
-  
-  export default {
-    props: ['title'],
-    data() {
-      return {
-        book: {
-          title: '',
-          author: '',
-          year: ''
-        },
-        isEdit: false
-      };
-    },
-    created() {
-      if (this.title) {
-        this.isEdit = true;
-        axios.get(`/books/search?title=${this.title}`)
-          .then(response => {
-            this.book = response.data;
-          })
-          .catch(error => {
-            console.error('There was an error fetching the book!', error);
-          });
-      }
-    },
-    methods: {
-      saveBook() {
-        if (this.isEdit) {
-          axios.post('/books/new', this.book)
-            .then(() => {
-              this.$router.push('/');
-            })
-            .catch(error => {
-              console.error('There was an error updating the book!', error);
-            });
-        } else {
-          axios.post('/books/new', this.book)
-            .then(() => {
-              this.$router.push('/');
-            })
-            .catch(error => {
-              console.error('There was an error adding the book!', error);
-            });
-        }
-      }
+  <div class="form-container">
+    <h1>{{ isEdit ? 'Edit Book' : 'Add Book' }}</h1>
+    <form @submit.prevent="saveBook">
+      <div class="form-group">
+        <label>Title:</label>
+        <input v-model="book.title" required />
+      </div>
+      <div class="form-group">
+        <label>Author:</label>
+        <input v-model="book.author" required />
+      </div>
+      <div class="form-group">
+        <label>Publication Year:</label>
+        <input v-model="book.publicationYear" type="number" required />
+      </div>
+      <button type="submit" class="btn">Save</button>
+    </form>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  props: ['title'],
+  data() {
+    return {
+      book: {
+        id: null,
+        title: '',
+        author: '',
+        publicationYear: ''
+      },
+      isEdit: false
+    };
+  },
+  created() {
+    if (this.title) {
+      this.isEdit = true;
+      axios.get(`/books/search?title=${this.title}`)
+        .then(response => {
+          this.book = response.data;
+        })
+        .catch(error => {
+          console.error('There was an error fetching the book!', error);
+        });
     }
-  };
-  </script>
+  },
+  methods: {
+    saveBook() {
+      const url = this.isEdit ? '/books/update' : '/books/new';
+      axios.post(url, this.book)
+        .then(() => {
+          this.$router.push('/');
+        })
+        .catch(error => {
+          console.error(`There was an error ${this.isEdit ? 'updating' : 'adding'} the book!`, error);
+        });
+    }
+  }
+};
+</script>
 
 <style scoped>
 .form-container {
@@ -77,7 +69,7 @@
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
-
+  background-color: #f9f9f9;
 }
 
 h1 {

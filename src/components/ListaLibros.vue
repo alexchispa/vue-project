@@ -1,14 +1,15 @@
 <template>
-    <div>
-      <h1>Book List</h1>
-      <ul>
-        <li id="lista" v-for="book in books" :key="book.title">
-          {{ book.title }} by {{ book.author }} ({{ book.year }})
-        </li>
-      </ul>
-      <router-link to="/books/new">Add a new book</router-link>
-    </div>
-  </template>
+  <div>
+    <h1>Book List</h1>
+    <ul>
+      <li id="lista" v-for="book in books" :key="book.title">
+        {{ book.title }} by {{ book.author }} ({{ book.publicationYear }})
+        <router-link :to="{ name: 'editBook', params: { title: book.title } }">Edit</router-link>
+      </li>
+    </ul>
+    <router-link to="/books/new">Add a new book</router-link>
+  </div>
+</template>
   
   <script>
   import axios from 'axios';
