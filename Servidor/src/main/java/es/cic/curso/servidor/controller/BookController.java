@@ -1,8 +1,8 @@
 package es.cic.curso.servidor.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,31 +13,54 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.cic.curso.servidor.model.Book;
+import es.cic.curso.servidor.repositorio.BookRepository;
 
 @RestController
 @RequestMapping("/books")
 public class BookController {
 
-    private List<Book> books = new ArrayList<>();
+    @Autowired
+    private BookRepository bookRepository;
 
     @PostMapping("/new")
-    public ResponseEntity<Book> addBook(@RequestBody Book book) {
-        books.add(book);
-        return ResponseEntity.status(HttpStatus.CREATED).body(book);
+    public ResponseEntity<?> addBook(@RequestBody Book book) {
+    try {
+        Book savedBook = bookRepository.save(book);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
+    } catch (Exception e) {
+        // Log the error
+        e.printStackTrace();
+        // Return a descriptive error message
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving the book: " + e.getMessage());
     }
+}
 
     @GetMapping
     public ResponseEntity<List<Book>> getAllBooks() {
+        List<Book> books = bookRepository.findAll();
         return ResponseEntity.ok(books);
     }
 
     @GetMapping("/search")
     public ResponseEntity<Book> getBook(@RequestParam String title) {
-        for (Book book : books) {
-            if (book.getTitle().equalsIgnoreCase(title)) {
-                return ResponseEntity.ok(book);
-            }
+        Book book = bookRepository.findByTitle(title);
+        if (book != null) {
+            return ResponseEntity.ok(book);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
+    @PostMapping("/update")
+    public ResponseEntity<?> updateBook(@RequestBody Book book) {
+    try {
+        if (book.getId() == null || !bookRepository.existsById(book.getId())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found.");
+        }
+        Book updatedBook = bookRepository.save(book);
+        return ResponseEntity.ok(updatedBook);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating the book: " + e.getMessage());
+    }
+}
 }

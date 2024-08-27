@@ -1,24 +1,48 @@
 package es.cic.curso.servidor.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "BOOK")
 public class Book {
 
-    public static List<Book> findAll() {
-        List<Book> books = new ArrayList<>();
-        books.add(new Book("Title", "Author", 2022));
-        return books;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    private Long id;
+
+    @Column(name = "TITLE")
+    private String title;
+
+    @Column(name = "AUTHOR")
+    private String author;
+
+    @Column(name = "PUBLICATION_YEAR")
+    private int publicationYear;
+
+    public Book() {
+        // Constructor por defecto
     }
 
-    private String title;
-    private String author;
-    private int year;
-
-    public Book(String title, String author, int year) {
+    public Book(Long id, String title, String author, int publicationYear) {
+        this.id = id;
         this.title = title;
         this.author = author;
-        this.year = year;
+        this.publicationYear = publicationYear;
+    }
+
+    // Getters y setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -37,13 +61,11 @@ public class Book {
         this.author = author;
     }
 
-    public int getYear() {
-        return year;
+    public int getPublicationYear() {
+        return publicationYear;
     }
 
-    public void setYear(int year) {
-        this.year = year;
+    public void setPublicationYear(int publicationYear) {
+        this.publicationYear = publicationYear;
     }
-
-
 }
